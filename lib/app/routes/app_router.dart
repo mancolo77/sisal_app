@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import '../../domain/entities/quiz_set.dart';
 import '../../domain/entities/quiz_attempt.dart';
 import '../../domain/entities/sport_section.dart';
+import '../../ui/screens/splash/splash_screen.dart';
 import '../../ui/screens/home_sections/home_sections_screen.dart';
 import '../../ui/screens/quiz_sets/quiz_sets_screen.dart';
 import '../../ui/screens/player/quiz_player_screen.dart';
@@ -13,7 +14,8 @@ import '../../ui/screens/create_quiz/create_quiz_screen.dart';
 import '../../ui/screens/settings/settings_screen.dart';
 
 class AppRouter {
-  static const String home = '/';
+  static const String splash = '/';
+  static const String home = '/home';
   static const String quizSets = '/quiz-sets';
   static const String player = '/player';
   static const String results = '/results';
@@ -23,8 +25,13 @@ class AppRouter {
   static const String settings = '/settings';
 
   static final GoRouter router = GoRouter(
-    initialLocation: home,
+    initialLocation: splash,
     routes: [
+      GoRoute(
+        path: splash,
+        name: 'splash',
+        builder: (context, state) => const SplashScreen(),
+      ),
       GoRoute(
         path: home,
         name: 'home',
@@ -36,7 +43,7 @@ class AppRouter {
         builder: (context, state) {
           final sectionName = state.uri.queryParameters['section'];
           SportSection? section;
-          
+
           if (sectionName != null) {
             try {
               section = SportSection.values.firstWhere(
@@ -46,7 +53,7 @@ class AppRouter {
               section = null;
             }
           }
-          
+
           return QuizSetsScreen(section: section);
         },
       ),
@@ -57,9 +64,7 @@ class AppRouter {
           final quizSet = state.extra as QuizSet?;
           if (quizSet == null) {
             return const Scaffold(
-              body: Center(
-                child: Text('Quiz set not found'),
-              ),
+              body: Center(child: Text('Quiz set not found')),
             );
           }
           return QuizPlayerScreen(quizSet: quizSet);
@@ -72,9 +77,7 @@ class AppRouter {
           final attempt = state.extra as QuizAttempt?;
           if (attempt == null) {
             return const Scaffold(
-              body: Center(
-                child: Text('Quiz attempt not found'),
-              ),
+              body: Center(child: Text('Quiz attempt not found')),
             );
           }
           return ResultsScreen(attempt: attempt);
@@ -87,9 +90,7 @@ class AppRouter {
           final attempt = state.extra as QuizAttempt?;
           if (attempt == null) {
             return const Scaffold(
-              body: Center(
-                child: Text('Quiz attempt not found'),
-              ),
+              body: Center(child: Text('Quiz attempt not found')),
             );
           }
           return ReviewScreen(attempt: attempt);
@@ -106,7 +107,7 @@ class AppRouter {
         builder: (context, state) {
           final sectionName = state.uri.queryParameters['section'];
           SportSection? section;
-          
+
           if (sectionName != null) {
             try {
               section = SportSection.values.firstWhere(
@@ -116,7 +117,7 @@ class AppRouter {
               section = null;
             }
           }
-          
+
           return CreateQuizScreen(preselectedSection: section);
         },
       ),
@@ -131,11 +132,7 @@ class AppRouter {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(
-              Icons.error_outline,
-              size: 64,
-              color: Colors.red,
-            ),
+            const Icon(Icons.error_outline, size: 64, color: Colors.red),
             const SizedBox(height: 16),
             Text(
               'Page not found',
