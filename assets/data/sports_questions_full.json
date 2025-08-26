@@ -1,0 +1,75 @@
+{
+  "version": "1.0",
+  "lastUpdated": "2025-01-27",
+  "totalQuestions": 135,
+  "sections": 9,
+  "questions": {
+    "football": [
+      {
+        "id": "football_001",
+        "text": "How many players are on a football team on the field at one time?",
+        "options": [
+          {"id": "f001_1", "text": "9"},
+          {"id": "f001_2", "text": "10"},
+          {"id": "f001_3", "text": "11"},
+          {"id": "f001_4", "text": "12"}
+        ],
+        "correctOptionIds": ["f001_3"],
+        "explanation": "A football team has 11 players on the field at any given time.",
+        "difficulty": 1
+      },
+      {
+        "id": "football_002",
+        "text": "What is the maximum duration of a FIFA World Cup match including extra time?",
+        "options": [
+          {"id": "f002_1", "text": "90 minutes"},
+          {"id": "f002_2", "text": "120 minutes"},
+          {"id": "f002_3", "text": "150 minutes"},
+          {"id": "f002_4", "text": "180 minutes"}
+        ],
+        "correctOptionIds": ["f002_2"],
+        "explanation": "A match can last up to 120 minutes including 30 minutes of extra time.",
+        "difficulty": 2
+      },
+      {
+        "id": "football_003",
+        "text": "Which card is shown for a serious foul in football?",
+        "options": [
+          {"id": "f003_1", "text": "Yellow card"},
+          {"id": "f003_2", "text": "Red card"},
+          {"id": "f003_3", "text": "Green card"},
+          {"id": "f003_4", "text": "Blue card"}
+        ],
+        "correctOptionIds": ["f003_2"],
+        "explanation": "A red card is shown for serious fouls, violent conduct, or receiving two yellow cards.",
+        "difficulty": 1
+      },
+      {
+        "id": "football_004",
+        "text": "What is the standard size of a football goal?",
+        "options": [
+          {"id": "f004_1", "text": "7.32m x 2.44m"},
+          {"id": "f004_2", "text": "8m x 2.5m"},
+          {"id": "f004_3", "text": "7m x 2.3m"},
+          {"id": "f004_4", "text": "8.32m x 2.64m"}
+        ],
+        "correctOptionIds": ["f004_1"],
+        "explanation": "FIFA regulation goal size is 7.32 meters wide and 2.44 meters high.",
+        "difficulty": 3
+      },
+      {
+        "id": "football_005",
+        "text": "Who is known as 'The King of Football'?",
+        "options": [
+          {"id": "f005_1", "text": "Maradona"},
+          {"id": "f005_2", "text": "Pelé"},
+          {"id": "f005_3", "text": "Messi"},
+          {"id": "f005_4", "text": "Ronaldo"}
+        ],
+        "correctOptionIds": ["f005_2"],
+        "explanation": "Pelé is widely known as 'The King of Football' and is considered one of the greatest players of all time.",
+        "difficulty": 2
+      }
+    ]
+  }
+}
