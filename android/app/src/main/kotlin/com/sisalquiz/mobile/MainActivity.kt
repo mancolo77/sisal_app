@@ -1,4 +1,4 @@
-package com.example.sisal_app
+package com.sisalquiz.mobile
 
 import io.flutter.embedding.android.FlutterActivity
 

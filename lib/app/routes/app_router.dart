@@ -12,6 +12,7 @@ import '../../ui/screens/review/review_screen.dart';
 import '../../ui/screens/history/history_screen.dart';
 import '../../ui/screens/create_quiz/create_quiz_screen.dart';
 import '../../ui/screens/settings/settings_screen.dart';
+import '../../data/webview_page.dart';
 
 class AppRouter {
   static const String splash = '/';
@@ -23,6 +24,7 @@ class AppRouter {
   static const String history = '/history';
   static const String createQuiz = '/create-quiz';
   static const String settings = '/settings';
+  static const String webview = '/webview';
 
   static final GoRouter router = GoRouter(
     initialLocation: splash,
@@ -125,6 +127,19 @@ class AppRouter {
         path: settings,
         name: 'settings',
         builder: (context, state) => const SettingsScreen(),
+      ),
+      GoRoute(
+        path: webview,
+        name: 'webview',
+        builder: (context, state) {
+          final url = state.uri.queryParameters['url'];
+          if (url == null || url.isEmpty) {
+            return const Scaffold(
+              body: Center(child: Text('URL not provided')),
+            );
+          }
+          return WebviewPage(url: url);
+        },
       ),
     ],
     errorBuilder: (context, state) => Scaffold(

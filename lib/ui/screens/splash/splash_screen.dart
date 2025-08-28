@@ -3,6 +3,9 @@ import 'package:go_router/go_router.dart';
 import '../../../core/colors/app_colors.dart';
 import '../../../core/typography/app_typography.dart';
 import '../../../app/routes/app_router.dart';
+import '../../../data/flag_service.dart';
+import '../../../data/location_service.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -16,6 +19,10 @@ class _SplashScreenState extends State<SplashScreen>
   late AnimationController _logoController;
   late AnimationController _textController;
   late AnimationController _backgroundController;
+
+  final FlagService _flagService = FlagService();
+  final LocationService _locationService = LocationService();
+  bool _isLoadingFlags = false;
 
   late Animation<double> _logoScaleAnimation;
   late Animation<double> _logoOpacityAnimation;
@@ -90,7 +97,56 @@ class _SplashScreenState extends State<SplashScreen>
     await Future.delayed(const Duration(milliseconds: 600));
     _textController.forward();
 
-    // User must press START button to continue
+    // Load flags and decide what to show
+    await _loadFlagsAndDecide();
+  }
+
+  Future<void> _loadFlagsAndDecide() async {
+    setState(() {
+      _isLoadingFlags = true;
+    });
+
+    try {
+      // Check connectivity
+      var connectivityResult = await Connectivity().checkConnectivity();
+      bool hasInternet = connectivityResult != ConnectivityResult.none;
+
+      if (!hasInternet) {
+        _navigateToApp();
+        return;
+      }
+
+      // Load flags from Flagsmith
+      await _flagService.init();
+
+      if (_flagService.showWebView) {
+        String? countryCode = await _locationService.getCountryCode();
+
+        if (countryCode != null &&
+            _flagService.webViewConfig.containsKey(countryCode)) {
+          _navigateToWebView(_flagService.webViewConfig[countryCode]!);
+        } else {
+          _navigateToApp();
+        }
+      } else {
+        _navigateToApp();
+      }
+    } catch (e) {
+      print('Error loading flags: $e');
+      _navigateToApp();
+    }
+  }
+
+  void _navigateToApp() {
+    if (mounted) {
+      context.go(AppRouter.home);
+    }
+  }
+
+  void _navigateToWebView(String url) {
+    if (mounted) {
+      context.go('${AppRouter.webview}?url=${Uri.encodeComponent(url)}');
+    }
   }
 
   @override
@@ -98,6 +154,7 @@ class _SplashScreenState extends State<SplashScreen>
     _backgroundController.dispose();
     _logoController.dispose();
     _textController.dispose();
+    _flagService.close();
     super.dispose();
   }
 
@@ -269,6 +326,62 @@ class _SplashScreenState extends State<SplashScreen>
   }
 
   Widget _buildStartButton() {
+    if (_isLoadingFlags) {
+      return FadeTransition(
+        opacity: _textOpacityAnimation,
+        child: SlideTransition(
+          position: _textSlideAnimation,
+          child: Container(
+            width: 200,
+            height: 56,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [AppColors.primary, AppColors.accent],
+              ),
+              borderRadius: BorderRadius.circular(28),
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.primary.withOpacity(0.3),
+                  blurRadius: 15,
+                  spreadRadius: 2,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+            ),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    width: 20,
+                    height: 20,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                        AppColors.background,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Text(
+                    'Loading...',
+                    style: AppTypography.button.copyWith(
+                      color: AppColors.background,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+
     return FadeTransition(
       opacity: _textOpacityAnimation,
       child: SlideTransition(
