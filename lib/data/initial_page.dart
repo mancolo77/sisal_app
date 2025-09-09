@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:sisal_app/data/flag_service.dart';
 import 'package:sisal_app/data/location_service.dart';
 import 'package:sisal_app/data/webview_page.dart';
-import 'package:sisal_app/app/routes/app_router.dart';
-import 'package:go_router/go_router.dart';
+import 'package:sisal_app/ui/screens/splash/splash_screen.dart';
 
 class InitialPage extends StatefulWidget {
   const InitialPage({super.key});
@@ -15,6 +14,7 @@ class InitialPage extends StatefulWidget {
 class _InitialPageState extends State<InitialPage> {
   final FlagService _flagService = FlagService();
   final LocationService _locationService = LocationService();
+  // Инициализируем DataService
 
   bool _isLoading = true;
   bool _shouldShowWebView = false;
@@ -58,9 +58,10 @@ class _InitialPageState extends State<InitialPage> {
   }
 
   void _navigateToApp() {
-    if (mounted) {
-      context.go(AppRouter.home);
-    }
+    setState(() {
+      _shouldShowWebView = false;
+      _isLoading = false;
+    });
   }
 
   void _navigateToWebView(String url) {
@@ -81,8 +82,7 @@ class _InitialPageState extends State<InitialPage> {
       return WebviewPage(url: _webViewUrl);
     }
 
-    // This should not be reached as we navigate directly
-    return const Scaffold(body: Center(child: Text('Redirecting...')));
+    return const SplashScreen();
   }
 
   @override

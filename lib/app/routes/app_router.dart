@@ -13,9 +13,11 @@ import '../../ui/screens/history/history_screen.dart';
 import '../../ui/screens/create_quiz/create_quiz_screen.dart';
 import '../../ui/screens/settings/settings_screen.dart';
 import '../../data/webview_page.dart';
+import '../../data/initial_page.dart';
 
 class AppRouter {
-  static const String splash = '/';
+  static const String initial = '/';
+  static const String splash = '/splash';
   static const String home = '/home';
   static const String quizSets = '/quiz-sets';
   static const String player = '/player';
@@ -27,8 +29,13 @@ class AppRouter {
   static const String webview = '/webview';
 
   static final GoRouter router = GoRouter(
-    initialLocation: splash,
+    initialLocation: initial,
     routes: [
+      GoRoute(
+        path: initial,
+        name: 'initial',
+        builder: (context, state) => const InitialPage(),
+      ),
       GoRoute(
         path: splash,
         name: 'splash',
